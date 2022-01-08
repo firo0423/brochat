@@ -20,14 +20,18 @@ let roomMenbers = 0
 console.log(sessions);
 // 监听
 io.on("connection", (socket) => {
-  console.log("有人链接");
+  roomMenbers = roomMenbers + 1
+  console.log("有人链接",roomMenbers);
+
+  // 处理登录人数事件
+  socket.emit('number',roomMenbers)
+  socket.broadcast.emit('number',roomMenbers)
 
   // 登录广播事件
   socket.on('login',data=>{
-    roomMenbers = roomMenbers + 1
     // 发送聊天记录
     socket.emit('history',sessions)
-    let processData= {name:data, message:data+'加入了聊天',number:roomMenbers}
+    let processData= {name:data, message:data+'加入了聊天'}
     socket.broadcast.emit('welcome',processData)
   })
 
@@ -39,13 +43,13 @@ io.on("connection", (socket) => {
     socket.broadcast.emit('chat',data)
   })
 
-
+  //断开事件
+  socket.on('disconnect', ()=>{
+    roomMenbers = roomMenbers - 1
+    console.log('有人断开',roomMenbers);
+  })
 });
-// 处理断线事件
-io.on('disconnection',(socket) => {
-  roomMenbers = roomMenbers-1
-  socket.broadcast.emit('logout',roomMenbers)
-})
+
 app.listen(3322, () => {
   console.log("服务开启成功。。。。");
 });

@@ -12,8 +12,14 @@ export default new Vuex.Store({
   },
   mutations: {
     /* 监听服务器事件，直接使用SOCKET_'服务器发布的时间名即可。' */
+    //处理成员数量事件
+    SOCKET_number(state, number){
+      console.log('数量变化了',number)
+      state.roomMenbers = number 
+    },
+
     SOCKET_welcome(state, data) {
-      state.roomMenbers = data.number;
+      console.log(data.number='+++++++++++++++++');
       state.sessions.push({
         name: data.name,
         message: data.message,
@@ -21,10 +27,7 @@ export default new Vuex.Store({
         welcome: true,
       });
     },
-    // 处理成员断开事件
-    SOCKET_logout(state, data) {
-      state.roomMenbers = data;
-    },
+
 
     // 登录拿取聊天记录
     SOCKET_history(state, data) {
