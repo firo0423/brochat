@@ -16,10 +16,34 @@ export default {
       message: "",
     };
   },
+  sockets: {
+    //查看socket是否渲染成功
+    connect() {
+      console.log("链接成功");
+    },
+    //检测socket断开链接
+    disconnect() {
+      console.log("断开链接");
+    }, 
+    // 重新链接
+    reconnect() {
+      console.log("重新链接");
+    },
+    //客户端接收后台传输的socket事件 后台写什么 这写什么
+    hi: function (msg) {
+      console.log(msg);
+      //然后记性你的一系列操作
+      this.arr.push(msg)
+    },
+  },
   methods: {
     sendMessage(e) {
       if (e.keyCode === 13) {
-        this.$store.commit("sendMessage", this.message);
+
+        // 在这里还要拿本地的一个名字
+        let username = 'firo'
+        this.$store.commit("sendMessage", {message:this.message, username:username});
+
         // 达成enter输入的效果
         e.preventDefault(); // 阻止浏览器默认换行操作
         this.message = "";
@@ -32,6 +56,8 @@ export default {
 
 <style scoped>
 #chatArea {
+  box-shadow: 0 -1px 2px 2px rgba(167, 167, 167, 0.151);
+  z-index: 999;
   position: absolute;
   bottom: 0px;
   padding: 0;

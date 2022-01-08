@@ -24,10 +24,13 @@ export default {
 
 <style>
 #home .el-header {
+  position: relative;
   height: 30px;
   line-height: 30px;
   background-color: #fff;
   text-align: center;
+  box-shadow: 0 2px 2px 2px rgba(139, 139, 139, 0.205);
+  z-index: 9999;
 }
 .el-header span {
   color: rgb(110, 110, 110);

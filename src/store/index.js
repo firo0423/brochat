@@ -52,6 +52,14 @@ export default new Vuex.Store({
     ],
   },
   mutations: {
+    sendMessage(state,data){
+      state.sessions.push({
+        name:data.username,
+        message:data.message,
+        date:new Date(),
+        self: true,
+      })
+    }
   },
   actions: {
   },

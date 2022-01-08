@@ -31,11 +31,14 @@ export default {
       
     };
   },
+  updated(){
+    console.log('更新了');
+    this.$refs.msgBoard.scrollTop = this.$refs.msgBoard.scrollHeight;
+  },
   mounted(){
     // 自动滚至底部
-     this.$nextTick(() => {
+       console.log('动了');
        this.$refs.msgBoard.scrollTop = this.$refs.msgBoard.scrollHeight;
-     })
   },
   filters: {
     timeFormat(date) {
@@ -52,6 +55,8 @@ export default {
 
 <style >
 #msgBoard{
+  position: relative;
+  z-index: 10;
   height: 690px;
   overflow-y: scroll;
   transition: all .2s;
