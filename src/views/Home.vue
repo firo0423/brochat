@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <el-header height="">
-      <span>在线聊天室(在线人数2)</span>
+      <span>在线聊天室(在线人数{{roomMenbers}})</span>
     </el-header>
     <!-- 聊天框 -->
     <msgBorad />
@@ -11,10 +11,12 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import msgBorad from "../components/msgBorad.vue";
 import chatArea from "../components/ChatArea.vue";
 export default {
   name: "Home",
+  computed: mapState(["roomMenbers"]),
   components: {
     chatArea,
     msgBorad,
