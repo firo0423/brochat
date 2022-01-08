@@ -2,12 +2,12 @@
   <div id="msgBoard" ref="msgBoard">
     <!-- v-for 的优先度比 v-if高所以不能一起使用 -->
     <ul>
-      <li v-for="(entry, index) in sessions" :key="index">
+      <li v-for="(entry, index) in get_sessions" :key="index">
         <div class="main" :class="{ self: entry.self }">
           <!-- 欢迎信息 -->
-          <template v-if="entry.welcome">
+          <div v-if="entry.welcome" class="welcome_shell">
             <p class="welcome">{{ entry.message }}</p>
-          </template>
+          </div>
 
           <!-- 聊天信息 -->
           <template v-if="!entry.welcome">
@@ -28,13 +28,13 @@
 
 <script>
 import moment from "moment";
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 export default {
-  computed: mapState(["sessions"]),
+  computed: mapGetters(["get_sessions"]),
   name: "msgBoard",
   data() {
     return {
-      username: "firo",
+      username: localStorage.getItem("username"),
     };
   },
   updated() {
@@ -94,12 +94,16 @@ export default {
   margin: 0;
 }
 #msgBoard li {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 #msgBoard li:first-child {
   margin-top: 20px;
 }
 /* 欢迎信息 */
+.welcome_shell{
+  float: left;
+  width: 100%;
+}
 .welcome {
   text-align: center;
   color: #686868;
@@ -107,7 +111,7 @@ export default {
 
 /* 别人信息 */
 .main .message {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   width: 80%;
   float: left;
   display: flex;
