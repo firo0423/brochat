@@ -13,6 +13,7 @@ export default {
   name: "chatArea",
   data() {
     return {
+      username:localStorage.getItem("username"),
       message: "",
     };
   },
@@ -41,8 +42,8 @@ export default {
       if (e.keyCode === 13) {
 
         // 在这里还要拿本地的一个名字
-        let username = 'firo'
-        this.$store.commit("sendMessage", {message:this.message, username:username});
+        this.$store.commit("sendMessage", {message:this.message, username:this.username});
+        // 要给socket端口送信息
 
         // 达成enter输入的效果
         e.preventDefault(); // 阻止浏览器默认换行操作
@@ -50,6 +51,10 @@ export default {
         return false;
       }
     },
+  },
+  mounted(){
+    this.$socket.connect();
+    this.$socket.emit("login", this.username)
   },
 };
 </script>

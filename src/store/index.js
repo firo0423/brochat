@@ -1,11 +1,17 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 var myDate = new Date();
 export default new Vuex.Store({
   state: {
     sessions: [
+      {
+        name: "虎",
+        message: "虎子加入了聊天",
+        date: myDate,
+        welcome: true,
+      },
       {
         name: "虎",
         message:
@@ -52,17 +58,24 @@ export default new Vuex.Store({
     ],
   },
   mutations: {
-    sendMessage(state,data){
+    /* 监听服务器事件，直接使用SOCKET_'服务器发布的时间名即可。' */
+    SOCKET_welcome(state, data) {
       state.sessions.push({
-        name:data.username,
-        message:data.message,
-        date:new Date(),
+        name: data.username,
+        message: data.message,
+        date: new Date(),
+        welcome: true,
+      });
+    },
+    sendMessage(state, data) {
+      state.sessions.push({
+        name: data.username,
+        message: data.message,
+        date: new Date(),
         self: true,
-      })
-    }
+      });
+    },
   },
-  actions: {
-  },
-  modules: {
-  }
-})
+  actions: {},
+  modules: {},
+});

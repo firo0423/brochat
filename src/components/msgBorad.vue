@@ -4,14 +4,22 @@
     <ul>
       <li v-for="(entry, index) in sessions" :key="index">
         <div class="main" :class="{ self: entry.self }">
-          <div class="avatar">{{ entry.name | stringAvatar }}</div>
-          <div class="message">
-            <p class="username">{{ entry.name }}</p>
-            <div class="text_line">
-              <p class="text">{{ entry.message }}</p>
+          <!-- 欢迎信息 -->
+          <template v-if="entry.welcome">
+            <p class="welcome">{{ entry.message }}</p>
+          </template>
+
+          <!-- 聊天信息 -->
+          <template v-if="!entry.welcome">
+            <div class="avatar">{{ entry.name | stringAvatar }}</div>
+            <div class="message">
+              <p class="username">{{ entry.name }}</p>
+              <div class="text_line">
+                <p class="text">{{ entry.message }}</p>
+              </div>
+              <p class="time">{{ entry.date | timeFormat }}</p>
             </div>
-            <p class="time">{{ entry.date|timeFormat }}</p>
-          </div>
+          </template>
         </div>
       </li>
     </ul>
@@ -19,30 +27,28 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from "moment";
 import { mapState } from "vuex";
 export default {
   computed: mapState(["sessions"]),
   name: "msgBoard",
   data() {
-    
     return {
       username: "firo",
-      
     };
   },
-  updated(){
-    console.log('更新了');
+  updated() {
+    console.log("更新了");
     this.$refs.msgBoard.scrollTop = this.$refs.msgBoard.scrollHeight;
   },
-  mounted(){
+  mounted() {
     // 自动滚至底部
-       console.log('动了');
-       this.$refs.msgBoard.scrollTop = this.$refs.msgBoard.scrollHeight;
+    console.log("动了");
+    this.$refs.msgBoard.scrollTop = this.$refs.msgBoard.scrollHeight;
   },
   filters: {
     timeFormat(date) {
-      return moment(date).format("HH:mm")
+      return moment(date).format("HH:mm");
     },
 
     stringAvatar(name) {
@@ -54,13 +60,14 @@ export default {
 </script>
 
 <style >
-#msgBoard{
+#msgBoard {
   position: relative;
   z-index: 10;
   height: 690px;
   overflow-y: scroll;
-  transition: all .2s;
+  transition: all 0.2s;
 }
+
 /* // 滚动条宽度 */
 #msgBoard::-webkit-scrollbar {
   width: 8px;
@@ -74,25 +81,28 @@ export default {
 #msgBoard::-webkit-scrollbar-thumb {
   background: #69696949;
   border-radius: 10px;
-  
 }
 #msgBoard::-webkit-scrollbar-thumb:hover {
   background: #8080808a;
 }
 
-
-ul {
+#msgBoard ul {
   list-style: none;
   padding: 0;
 }
-p {
+#msgBoard p {
   margin: 0;
 }
-li {
+#msgBoard li {
   margin-top: 40px;
 }
-li:first-child {
+#msgBoard li:first-child {
   margin-top: 20px;
+}
+/* 欢迎信息 */
+.welcome {
+  text-align: center;
+  color: #686868;
 }
 
 /* 别人信息 */
@@ -157,7 +167,6 @@ li:first-child {
   background-color: #fff;
   margin-right: 20px;
   border-radius: 10px;
-  
 }
 .self .text {
   display: block;
