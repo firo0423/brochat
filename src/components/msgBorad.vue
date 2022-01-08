@@ -1,12 +1,17 @@
 <template>
-  <div class="msgBoard">
+  <div id="msgBoard" ref="msgBoard">
     <!-- v-for 的优先度比 v-if高所以不能一起使用 -->
     <ul>
       <li v-for="(entry, index) in sessions" :key="index">
         <div class="main" :class="{ self: entry.self }">
           <div class="avatar">{{ entry.name | stringAvatar }}</div>
-          <p class="username">{{ entry.name }}</p>
-          <p class="text">{{ entry.message }}</p>
+          <div class="message">
+            <p class="username">{{ entry.name }}</p>
+            <div class="text_line">
+              <p class="text">{{ entry.message }}</p>
+            </div>
+            <p class="time">{{ entry.date|timeFormat }}</p>
+          </div>
         </div>
       </li>
     </ul>
@@ -14,34 +19,27 @@
 </template>
 
 <script>
+import moment from 'moment'
+import { mapState } from "vuex";
 export default {
+  computed: mapState(["sessions"]),
   name: "msgBoard",
   data() {
-    var myDate = new Date();
+    
     return {
       username: "firo",
-      sessions: [
-        {
-          name: "根根",
-          message: "这是一条别人的消息12333333333,123333333312312321231212333333333",
-          date: myDate.getHours() + 1 + (myDate.getMinutes() + 1),
-          self: false,
-        },
-        {
-          name: "firo",
-          message: "这是一条自己的消息",
-          date: myDate.getHours() + 1 + (myDate.getMinutes() + 1),
-          self: true,
-        },
-      ],
+      
     };
   },
+  mounted(){
+    // 自动滚至底部
+     this.$nextTick(() => {
+       this.$refs.msgBoard.scrollTop = this.$refs.msgBoard.scrollHeight;
+     })
+  },
   filters: {
-    time(date) {
-      if (date) {
-        date = new Date(date);
-      }
-      return `${date.getHours()}:${date.getMinutes()}`;
+    timeFormat(date) {
+      return moment(date).format("HH:mm")
     },
 
     stringAvatar(name) {
@@ -52,7 +50,32 @@ export default {
 };
 </script>
 
-<style scoped>
+<style >
+#msgBoard{
+  height: 690px;
+  overflow-y: scroll;
+  transition: all .2s;
+}
+/* // 滚动条宽度 */
+#msgBoard::-webkit-scrollbar {
+  width: 8px;
+}
+/* // 滚动条轨道 */
+#msgBoard::-webkit-scrollbar-track {
+  background: rgb(239, 239, 239);
+  border-radius: 2px;
+}
+/* // 小滑块 */
+#msgBoard::-webkit-scrollbar-thumb {
+  background: #69696949;
+  border-radius: 10px;
+  
+}
+#msgBoard::-webkit-scrollbar-thumb:hover {
+  background: #8080808a;
+}
+
+
 ul {
   list-style: none;
   padding: 0;
@@ -66,20 +89,35 @@ li {
 li:first-child {
   margin-top: 20px;
 }
-.main{
-  position: relative;
-}
 
 /* 别人信息 */
-.main .text {
-  background-color: #fafafa;
+.main .message {
+  margin-bottom: 30px;
+  width: 80%;
   float: left;
+  display: flex;
+  flex-direction: column;
+}
+.main .time {
+  padding-left: 10px;
+  font-size: 14px;
+  text-align: left;
+  color: rgb(110, 110, 110);
+  float: left;
+}
+.main .text {
+  border-radius: 10px;
+  float: left;
+  max-width: 100%;
+  word-break: break-word;
   display: block;
-  max-width: 60%;
+  background-color: #fafafa;
   text-align: left;
   padding: 10px;
 }
 .main .username {
+  padding-left: 10px;
+  margin-bottom: 3px;
   font-size: 14px;
   color: rgb(110, 110, 110);
 }
@@ -93,9 +131,18 @@ li:first-child {
   margin-left: 20px;
   margin-right: 20px;
   border-radius: 10px;
+  font-size: 24px;
 }
 
 /* 个人信息 */
+.self .message {
+  float: right;
+}
+.self .time {
+  font-size: 14px;
+  padding-right: 10px;
+  text-align: right;
+}
 .self .avatar {
   float: right;
   height: 57px;
@@ -105,15 +152,17 @@ li:first-child {
   background-color: #fff;
   margin-right: 20px;
   border-radius: 10px;
+  
 }
 .self .text {
-  background-color: #fafafa;
-  float: right;
   display: block;
-  max-width: 80%;
+  float: right;
+  max-width: 100%;
+  background-color: #9eea6a;
   text-align: right;
 }
 .self .username {
+  padding-right: 10px;
   text-align: right;
 }
 </style>

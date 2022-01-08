@@ -1,7 +1,7 @@
 <template>
   <div id="chatArea">
     <textarea
-      placeholder="按 Ctrl + Enter 发送"
+      placeholder="按 Enter 发送"
       @keydown.enter="sendMessage"
       v-model="message"
     ></textarea>
@@ -40,12 +40,18 @@ export default {
   border-top: solid 1px #ddd;
 }
 textarea {
+  font-family: Arial,sans-serif;
   padding: 10px;
-  font-size: 15px;
+  font-size: 16px;
   width: 100%;
   height: 100%;
   border: none;
   outline: none;
   box-sizing: border-box;
+  resize: none;
+}
+textarea::-webkit-input-placeholder {
+  color: rgb(102, 102, 102);
+  font-family: Arial,sans-serif;
 }
 </style>

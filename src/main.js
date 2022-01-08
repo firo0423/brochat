@@ -13,7 +13,12 @@ Vue.use(
   new VueSocketIO({
     debug: true,
     connection: "http://localhost:4000",
-    options:{autoConnect:false}
+    options:{autoConnect:false},
+    vuex: {
+      store,
+      actionPrefix: 'SOCKET_',
+      mutationPrefix: 'SOCKET_'
+    },
   })
 );
 

@@ -6,6 +6,7 @@
 
 <style>
 body {
+  font-family: Arial,sans-serif;
   height: 100%;
   background-color: rgb(194, 194, 194);
   display: flex;
