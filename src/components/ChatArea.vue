@@ -1,6 +1,10 @@
 <template>
   <div id="chatArea">
     <textarea
+      :style="{
+        backgroundColor: theme.head_textarea_BackColor,
+        color: theme.textarea_TextColor,
+      }"
       placeholder="按 Enter 发送"
       @keydown.enter="sendMessage"
       v-model="message"
@@ -9,8 +13,10 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "chatArea",
+  computed: mapState(["theme"]),
   data() {
     return {
       username: localStorage.getItem("username"),
@@ -60,6 +66,7 @@ export default {
     },
   },
   mounted() {
+    // 连接socket服务器
     this.$socket.connect();
     this.$socket.emit("login", this.username);
   },

@@ -1,30 +1,29 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import Vue from "vue";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
 import VueSocketIO from "vue-socket.io";
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 Vue.use(ElementUI);
 // 配置socket.io
 Vue.use(
   new VueSocketIO({
     debug: true,
-    connection: "http://localhost:4000",
-    options:{autoConnect:false},
+    connection: "http://101.43.152.94:4000",
+    options: { autoConnect: false },
     vuex: {
       store,
-      actionPrefix: 'SOCKET_',
-      mutationPrefix: 'SOCKET_'
+      actionPrefix: "SOCKET_",
+      mutationPrefix: "SOCKET_",
     },
   })
 );
 
-
 new Vue({
   router,
   store,
-  render: h => h(App)
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount("#app");

@@ -1,9 +1,13 @@
 <template>
-  <div id="msgBoard" ref="msgBoard">
+  <div
+    id="msgBoard"
+    ref="msgBoard"
+    :style="{ backgroundColor: theme.chat_backgroundColor }"
+  >
     <!-- v-for 的优先度比 v-if高所以不能一起使用 -->
     <ul>
       <li v-for="(entry, index) in get_sessions" :key="index">
-        <div class="main" :class="{ self: entry.self }">
+        <div class="main" :class="{ self: entry.self }" re>
           <!-- 欢迎信息 -->
           <div v-if="entry.welcome" class="welcome_shell">
             <p class="welcome">{{ entry.message }}</p>
@@ -11,13 +15,44 @@
 
           <!-- 聊天信息 -->
           <template v-if="!entry.welcome">
-            <div class="avatar">{{ entry.name | stringAvatar }}</div>
+            <div
+              class="avatar"
+              :style="{
+                backgroundColor: theme.avatar_BackColor,
+                color: theme.avatar_FontColor,
+              }"
+            >
+              {{ entry.name | stringAvatar }}
+            </div>
             <div class="message">
-              <p class="username">{{ entry.name }}</p>
+              <p
+                class="username"
+                :style="{
+                  color: theme.chat_username_timeColor,
+                }"
+              >
+                {{ entry.name }}
+              </p>
               <div class="text_line">
-                <p class="text">{{ entry.message }}</p>
+                <p
+                  class="text"
+                  :style="{
+                    color: theme.textarea_TextColor,
+                    '--self_back': theme.chat_self_MessageBackColor,
+                    '--main_back': theme.chat_main_MessageBackColor,
+                  }"
+                >
+                  {{ entry.message }}
+                </p>
               </div>
-              <p class="time">{{ entry.date | timeFormat }}</p>
+              <p
+                class="time"
+                :style="{
+                  color: theme.chat_username_timeColor,
+                }"
+              >
+                {{ entry.date | timeFormat }}
+              </p>
             </div>
           </template>
         </div>
@@ -29,21 +64,39 @@
 <script>
 import moment from "moment";
 import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 export default {
-  computed: mapGetters(["get_sessions"]),
+  computed: {
+    ...mapGetters(["get_sessions", "get_theme"]),
+    ...mapState(["theme"]),
+  },
   name: "msgBoard",
   data() {
     return {
       username: localStorage.getItem("username"),
     };
   },
+  watch: {
+    get_theme: {
+      deep: true,
+      handler() {
+        console.log("储存了");
+        this.$store.commit("storeTheme");
+      },
+    },
+  },
   updated() {
     console.log("更新了");
     this.$refs.msgBoard.scrollTop = this.$refs.msgBoard.scrollHeight;
   },
   mounted() {
+    // 开头初始化主题
+    console.log(localStorage.getItem("theme"));
+    if (localStorage.getItem("theme") !== null) {
+      console.log("读取了");
+      this.$store.commit("initTheme");
+    }
     // 自动滚至底部
-    console.log("动了");
     this.$refs.msgBoard.scrollTop = this.$refs.msgBoard.scrollHeight;
   },
   filters: {
@@ -74,7 +127,7 @@ export default {
 }
 /* // 滚动条轨道 */
 #msgBoard::-webkit-scrollbar-track {
-  background: rgb(239, 239, 239);
+  background: rgba(239, 239, 239, 0);
   border-radius: 2px;
 }
 /* // 小滑块 */
@@ -100,7 +153,7 @@ export default {
   margin-top: 20px;
 }
 /* 欢迎信息 */
-.welcome_shell{
+.welcome_shell {
   float: left;
   width: 100%;
 }
@@ -125,12 +178,12 @@ export default {
   float: left;
 }
 .main .text {
+  background-color: var(--main_back);
   border-radius: 10px;
   float: left;
   max-width: 100%;
   word-break: break-word;
   display: block;
-  background-color: #fafafa;
   text-align: left;
   padding: 10px;
 }
@@ -173,10 +226,11 @@ export default {
   border-radius: 10px;
 }
 .self .text {
+  background-color: var(--self_back);
   display: block;
   float: right;
   max-width: 100%;
-  background-color: #9eea6a;
+
   text-align: right;
 }
 .self .username {
