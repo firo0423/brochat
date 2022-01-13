@@ -33,3 +33,10 @@ brochat
 ├── README.md
 └── vue.config.js
 ```
+## 效果展示
+聊天页面<br>
+![image](https://user-images.githubusercontent.com/93251384/149264743-90681918-9913-4c82-aa5c-0e0b50b32f81.png)<br>
+主页面<br>
+![image](https://user-images.githubusercontent.com/93251384/149264825-adc4ae2e-5e48-4d7b-9315-32107ee9c47a.png)<br>
+
+
