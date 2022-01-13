@@ -230,7 +230,6 @@ export default {
   display: block;
   float: right;
   max-width: 100%;
-
   text-align: right;
 }
 .self .username {

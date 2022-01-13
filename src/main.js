@@ -12,7 +12,7 @@ Vue.use(ElementUI);
 Vue.use(
   new VueSocketIO({
     debug: true,
-    connection: "http://101.43.152.94:4000",
+    connection: "http://localhost:4000",
     options: { autoConnect: false },
     vuex: {
       store,

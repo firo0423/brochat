@@ -4,7 +4,9 @@ const app = express();
 // 开启socket服务
 let server = app.listen(4000);
 // socket 初始化
-// 配置websocket跨域问题
+
+// cors配置websocket跨域问题
+//将socket.io注入express模块
 var io = require('socket.io')(server,{
   allowEIO3: true,
   cors: {
@@ -14,13 +16,22 @@ var io = require('socket.io')(server,{
 	}
 });
 
+// 把聊天记录存内存里面
 let sessions = []
 let roomMenbers = 0
 
-console.log(sessions);
+
 // 监听
 io.on("connection", (socket) => {
+  
+  // 直接获取后台用户数量
+  // const count = io.engine.clientsCount
+  // console.log(count);
+  // const count2 = io.of("/").sockets.size;
+  // console.log(count2);
+  
   roomMenbers = roomMenbers + 1
+
   console.log("有人链接",roomMenbers);
 
   // 处理登录人数事件
@@ -29,6 +40,7 @@ io.on("connection", (socket) => {
 
   // 登录广播事件
   socket.on('login',data=>{
+    socket.emit('socket',socket.name)
     // 发送聊天记录
     socket.emit('history',sessions)
     let processData= {name:data, message:data+'加入了聊天'}

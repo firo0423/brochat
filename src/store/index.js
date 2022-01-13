@@ -24,6 +24,10 @@ export default new Vuex.Store({
     get_theme:(state) => state.theme,
   },
   mutations: {
+    SOCKET_socket(state, socket) {
+      console.log(socket);
+    },
+
     /* 监听服务器事件，直接使用SOCKET_'服务器发布的时间名即可。' */
     //处理成员数量事件
     SOCKET_number(state, number) {
